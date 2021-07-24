@@ -1,7 +1,10 @@
-from fastapi import FastAPI, Body, Header, File
+from fastapi import FastAPI
 from routes.v1 import app_v1
 from routes.v2 import app_v2
 from starlette.requests import Request
+from utils.security import check_jwt_token
+from starlette.responses import Response
+from starlette.status import HTTP_401_UNAUTHORIZED
 
 app = FastAPI()
 
@@ -12,6 +15,15 @@ app.mount("/v2", app_v2)
 @app.middleware("http")
 async def middleware(request: Request, call_next):
     # modify request
+    if not str(request.url).__contains__("/token"):
+        try:
+            jwt_token = request.headers["Authorization"].split("Bearer ")[1]
+            is_valid = check_jwt_token(jwt_token)
+        except Exception as e:
+            is_valid = False
+        if not is_valid:
+            return Response("Unauthorized", status_code=HTTP_401_UNAUTHORIZED)
+
     response = await call_next(request)
     # modify response
     return response

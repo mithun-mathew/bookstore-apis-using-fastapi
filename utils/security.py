@@ -5,7 +5,6 @@ from utils.const import JWT_EXPIRATION_TIME_MINUTES, JWT_ALGORITHM, JWT_SECRET_K
 import jwt
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from starlette.status import HTTP_401_UNAUTHORIZED
 import time
 
 pwd_context = CryptContext(schemes=["bcrypt"])
@@ -65,8 +64,8 @@ def check_jwt_token(token: str = Depends(oauth_schema)):
             if db_jwt_user1.username == username:
                 return final_checks(role)
     except Exception as e:
-        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED)
-    raise HTTPException(status_code=HTTP_401_UNAUTHORIZED)
+        raise False
+    raise False
 
 
 # Last checking and returning the final result
