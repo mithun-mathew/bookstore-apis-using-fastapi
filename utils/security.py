@@ -3,8 +3,8 @@ from models.jwtUser import JWTUser
 from datetime import datetime, timedelta
 from utils.const import JWT_EXPIRATION_TIME_MINUTES, JWT_ALGORITHM, JWT_SECRET_KEY
 import jwt
-from fastapi import Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import Depends
+from fastapi.security import OAuth2PasswordBearer
 import time
 
 pwd_context = CryptContext(schemes=["bcrypt"])
